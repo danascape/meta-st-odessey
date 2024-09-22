@@ -6,10 +6,10 @@ Dependencies
 ============
 
   URI: https://github.com/openembedded/openembedded-core.git
-  branch: kirkstone
+  branch: mickledore
 
   URI: https://github.com/STMicroelectronics/meta-st-stm32mp
-  branch: kirkstone
+  branch: mickledore
 
 Patches
 =======
