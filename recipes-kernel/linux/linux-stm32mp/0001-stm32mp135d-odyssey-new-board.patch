@@ -1,4 +1,4 @@
-From e49299c295b7013db7d23fbc5ce6b2364c7335f1 Mon Sep 17 00:00:00 2001
+From 8957fff5f22399d8bd22365edeb447bd790b6ad9 Mon Sep 17 00:00:00 2001
 From: Xogium <contact@xogium.me>
 Date: Thu, 14 Sep 2023 20:37:58 +0200
 Subject: [PATCH] stm32mp135d-odyssey: new board
@@ -9,23 +9,146 @@ board.
 * Based on stm32mp135d instead of stm32mp135f.
 * Lots of useless dt nodes removed for nonexistent hardware.
 ---
- arch/arm/boot/dts/Makefile                |   1 +
- arch/arm/boot/dts/stm32mp135d-odyssey.dts | 455 ++++++++++++++++++++++
- 2 files changed, 456 insertions(+)
+ arch/arm/boot/dts/Makefile                    |   2 +
+ .../boot/dts/stm32mp135d-odyssey-grove.dts    | 114 +++++
+ arch/arm/boot/dts/stm32mp135d-odyssey.dts     | 455 ++++++++++++++++++
+ 3 files changed, 571 insertions(+)
+ create mode 100644 arch/arm/boot/dts/stm32mp135d-odyssey-grove.dts
  create mode 100644 arch/arm/boot/dts/stm32mp135d-odyssey.dts
 
 diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 916915e88838..7e561cff8b62 100644
+index 916915e88838..ffdbd255ed16 100644
 --- a/arch/arm/boot/dts/Makefile
 +++ b/arch/arm/boot/dts/Makefile
-@@ -1210,6 +1210,7 @@ dtb-$(CONFIG_ARCH_STM32) += \
+@@ -1210,6 +1210,8 @@ dtb-$(CONFIG_ARCH_STM32) += \
  	stm32h743i-eval.dtb \
  	stm32h743i-disco.dtb \
  	stm32h750i-art-pi.dtb \
 +	stm32mp135d-odyssey.dtb \
++	stm32mp135d-odyssey-grove.dtb \
  	stm32mp135f-dk.dtb \
  	stm32mp135f-dk-a7-examples.dtb \
  	stm32mp151a-prtt1a.dtb \
+diff --git a/arch/arm/boot/dts/stm32mp135d-odyssey-grove.dts b/arch/arm/boot/dts/stm32mp135d-odyssey-grove.dts
+new file mode 100644
+index 000000000000..455452b5c1d1
+--- /dev/null
++++ b/arch/arm/boot/dts/stm32mp135d-odyssey-grove.dts
+@@ -0,0 +1,114 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
++/*
++ * Copyright (C) STMicroelectronics 2021 - All Rights Reserved
++ * Author: Alexandre Torgue <alexandre.torgue@foss.st.com> for STMicroelectronics.
++ * Copyright (C) 2023 Casey Reeves <casey@xogium.me>
++ */
++
++/dts-v1/;
++
++#include "stm32mp135d-odyssey.dts"
++
++/ {
++	model = "Seeed STM32MP135D Odyssey Board (with Grove)";
++	compatible = "st,stm32mp135d-odyssey-grove", "st,stm32mp135d-odyssey", "st,stm32mp135f-dk", "st,stm32mp135";
++};
++
++&usart2 {
++	pinctrl-names = "default", "sleep", "idle";
++	pinctrl-0 = <&usart2_pins_b>;
++	pinctrl-1 = <&usart2_sleep_pins_b>;
++	pinctrl-2 = <&usart2_idle_pins_b>;
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++};
++
++&timers3 {
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++	pwm {
++		pinctrl-0 = <&pwm3_pins_b>;
++		pinctrl-1 = <&pwm3_sleep_pins_b>;
++		pinctrl-names = "default", "sleep";
++		status = "okay";
++	};
++};
++
++&timers5 {
++	/delete-property/dmas;
++	/delete-property/dma-names;
++	status = "okay";
++	pwm {
++		pinctrl-0 = <&pwm5_pins_a>;
++		pinctrl-1 = <&pwm5_sleep_pins_a>;
++		pinctrl-names = "default", "sleep";
++		status = "okay";
++	};
++};
++
++&pinctrl {
++	/* usart2 */
++	usart2_pins_b: usart2-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 13, AF7)>; /* USART2_TX */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>; /* USART2_RX */
++			bias-disable;
++		};
++	};
++
++	usart2_idle_pins_b: usart2-idle-1 {
++		pins1 {
++			pinmux = <STM32_PINMUX('F', 13, ANALOG)>; /* USART2_TX */
++		};
++		pins2 {
++			pinmux = <STM32_PINMUX('D', 15, AF1)>; /* USART2_RX */
++			bias-disable;
++		};
++	};
++
++	usart2_sleep_pins_b: usart2-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('F', 13, ANALOG)>, /* USART2_TX */
++				 <STM32_PINMUX('D', 15, ANALOG)>; /* USART2_RX */
++		};
++	};
++
++	/* pwm3 */
++	pwm3_pins_b: pwm3-1 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 6, AF2)>; /* TIM3_CH1 */
++			bias-pull-down;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	pwm3_sleep_pins_b: pwm3-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 6, ANALOG)>; /* TIM3_CH1 */
++		};
++	};
++
++	/* pwm5 */
++	pwm5_pins_a: pwm5-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 3, AF2)>; /* TIM5_CH4 */
++			bias-pull-down;
++			drive-push-pull;
++			slew-rate = <0>;
++		};
++	};
++
++	pwm5_sleep_pins_a: pwm5-sleep-0 {
++		pins {
++			pinmux = <STM32_PINMUX('A', 3, ANALOG)>; /* TIM5_CH4 */
++		};
++	};
++};
 diff --git a/arch/arm/boot/dts/stm32mp135d-odyssey.dts b/arch/arm/boot/dts/stm32mp135d-odyssey.dts
 new file mode 100644
 index 000000000000..d253e3b41a97
