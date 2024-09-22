@@ -1,4 +1,4 @@
-From d4b8a32e1b7f7a9ced8212f40b781bd8229649de Mon Sep 17 00:00:00 2001
+From 150505f9fa31f0154d03ec85187e5329b5399084 Mon Sep 17 00:00:00 2001
 From: Xogium <contact@xogium.me>
 Date: Wed, 13 Sep 2023 18:10:29 +0200
 Subject: [PATCH] stm32mp135d-odyssey: new board
@@ -12,9 +12,6 @@ nonexistent peripherals.
 * Fixed regulators.
 
 Signed-off-by: Saalim Quadri <danascape@gmail.com>
-
-# Conflicts:
-#	arch/arm/dts/Makefile
 ---
  arch/arm/dts/Makefile                        |   1 +
  arch/arm/dts/stm32mp135d-odyssey-u-boot.dtsi |  49 ++
@@ -24,20 +21,20 @@ Signed-off-by: Saalim Quadri <danascape@gmail.com>
  create mode 100644 arch/arm/dts/stm32mp135d-odyssey.dts
 
 diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
-index c202571f34..b846151cfc 100644
+index 5424eac7cd5..276f5c9b6c0 100644
 --- a/arch/arm/dts/Makefile
 +++ b/arch/arm/dts/Makefile
-@@ -1075,6 +1075,7 @@ dtb-$(CONFIG_ASPEED_AST2600) += ast2600-evb.dtb
+@@ -1181,6 +1181,7 @@ dtb-$(CONFIG_ASPEED_AST2600) += ast2600-evb.dtb
  dtb-$(CONFIG_ARCH_STI) += stih410-b2260.dtb
  
- dtb-$(CONFIG_STM32MP13x) += \
+ dtb-$(CONFIG_STM32MP13X) += \
 +	stm32mp135d-odyssey.dtb \
  	stm32mp135f-dk.dtb
  
- dtb-$(CONFIG_STM32MP15x) += \
+ dtb-$(CONFIG_STM32MP15X) += \
 diff --git a/arch/arm/dts/stm32mp135d-odyssey-u-boot.dtsi b/arch/arm/dts/stm32mp135d-odyssey-u-boot.dtsi
 new file mode 100644
-index 0000000000..58fe24dc14
+index 00000000000..58fe24dc14e
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp135d-odyssey-u-boot.dtsi
 @@ -0,0 +1,49 @@
@@ -92,7 +89,7 @@ index 0000000000..58fe24dc14
 +};
 diff --git a/arch/arm/dts/stm32mp135d-odyssey.dts b/arch/arm/dts/stm32mp135d-odyssey.dts
 new file mode 100644
-index 0000000000..4cc3521996
+index 00000000000..4cc35219960
 --- /dev/null
 +++ b/arch/arm/dts/stm32mp135d-odyssey.dts
 @@ -0,0 +1,452 @@
